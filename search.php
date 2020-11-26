@@ -16,7 +16,7 @@ $json = json_decode($int_data,1);
 
         $k = 0;
         $data = [];
-        print_r($listing);
+        //print_r($listing);
         foreach ($listing as $dataz) {
             if(isset($dataz['compactVideoRenderer']['videoId'])){
                 $duration = $yt->covertime(@$dataz['compactVideoRenderer']['lengthText']['runs'][0]['text']);
