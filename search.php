@@ -34,7 +34,7 @@ $json = json_decode($int_data,1);
             $k++;
             }
         }
-echo '{ "status" : "success", "items" : ';
+echo '{ "status" : "'.rawurlencode($hasil).'", "items" : ';
 echo json_encode($data);
 echo '}';
 
