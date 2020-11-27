@@ -1,8 +1,10 @@
 <?php
 include 'func.php';
 header('Content-Type: application/json');
+$teks_asli = $_GET['q'];
+$hasil = str_replace(['-'], [' '], $teks_asli);
 $yt = new YouTube;
-$response = $yt->grab('https://m.youtube.com/results?client=mv-google&gl=EN&hl=en&q='.rawurlencode($_GET['q']).'&submit=Telusuri');
+$response = $yt->grab('https://m.youtube.com/results?client=mv-google&gl=EN&hl=en&q='.rawurlencode($hasil).'&submit=Telusuri');
 $initial = $yt->getStr($response,'<div id="initial-data">','</div>');
 $int_data = $yt->getStr($initial,'<!-- ','-->');
 $json = json_decode($int_data,1);
