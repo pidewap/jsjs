@@ -72,7 +72,7 @@ $link =  $span->getElementsByTagName('strong');
  document.getElementsByName("blog_cat")[0].value = "<?php if (preg_match("/Download/i", $link->item(4)->nodeValue)) {
     echo str_replace("Download Lagu ", "", $link->item(4)->nodeValue);
 } else {
-    echo str_replace("Download Lagu ", "", $link->item(3)->nodeValue);
+    echo str_replace("Download Lagu ", "", $link->item(2)->nodeValue);
 }
 ?>" ;
 document.getElementsByName("var-3")[0].value = "<?php if (preg_match("/MB/i", $link->item(5)->nodeValue)) {
