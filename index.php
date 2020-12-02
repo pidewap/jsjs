@@ -69,10 +69,10 @@ $link =  $span->getElementsByTagName('strong');
 
      ?>
  document.getElementsByName("blog_title")[0].value = "<?php echo $link->item(1)->nodeValue; ?> - <?php echo $link->item(0)->nodeValue; ?>[<?php echo $linkkk->item(0)->getAttribute('src'); ?>]" ;
- document.getElementsByName("blog_cat")[0].value = "<?php if (preg_match("/Download/i", $link->item(4)->nodeValue)) {
-    echo str_replace("Download Lagu ", "", $link->item(4)->nodeValue);
-} else {
+ document.getElementsByName("blog_cat")[0].value = "<?php if (preg_match("/Download/i", $link->item(3)->nodeValue)) {
     echo str_replace("Download Lagu ", "", $link->item(3)->nodeValue);
+} else {
+    echo str_replace("Download Lagu ", "", $link->item(4)->nodeValue);
 }
 ?>" ;
 document.getElementsByName("var-3")[0].value = "<?php if (preg_match("/MB/i", $link->item(5)->nodeValue)) {
