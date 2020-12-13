@@ -4,7 +4,7 @@ header('Content-Type: application/json');
 $teks_asli = $_GET['q'];
 $hasil = str_replace(['-'], [' '], $teks_asli);
 $yt = new YouTube;
-$response = $yt->grab('https://m.youtube.com/results?client=mv-google&gl=EN&hl=en&q='.rawurlencode($hasil).'&submit=Telusuri');
+$response = $yt->grab('https://m.youtube.com/results?search_query='.rawurlencode($hasil).'&sp=EgQIBRAB');
 $initial = $yt->getStr($response,'<div id="initial-data">','</div>');
 $int_data = $yt->getStr($initial,'<!-- ','-->');
 $json = json_decode($int_data,1);
@@ -18,7 +18,7 @@ $json = json_decode($int_data,1);
 
         $k = 0;
         $data = [];
-        //print_r($listing);
+        print_r($listing);
         foreach ($listing as $dataz) {
             if(isset($dataz['compactVideoRenderer']['videoId'])){
                 $duration = $yt->covertime(@$dataz['compactVideoRenderer']['lengthText']['runs'][0]['text']);
