@@ -1,42 +1,41 @@
 <?php
-include 'func.php';
-header('Content-Type: application/json');
-$teks_asli = $_GET['q'];
-$hasil = str_replace(['-'], [' '], $teks_asli);
-$yt = new YouTube;
-$response = $yt->grab('https://m.youtube.com/results?search_query='.rawurlencode($hasil).'&sp=EgQIBRAB');
-$initial = $yt->getStr($response,'<div id="initial-data">','</div>');
-$int_data = $yt->getStr($initial,'<!-- ','-->');
-$json = json_decode($int_data,1);
-       if(!empty(strpos($int_data,'universalWatchCardRenderer'))){
-        $listing = $json['contents']['sectionListRenderer']['contents'][count($json['contents']['sectionListRenderer']['contents']) - 2]['itemSectionRenderer']['contents'];
-        }
-        else{
-        $listing = $json['contents']['sectionListRenderer']['contents'][0]['itemSectionRenderer']['contents'];
-        }
-        //print_r($listing);
 
-        $k = 0;
-        $data = [];
-        print_r($initial);
-        foreach ($listing as $dataz) {
-            if(isset($dataz['compactVideoRenderer']['videoId'])){
-                $duration = $yt->covertime(@$dataz['compactVideoRenderer']['lengthText']['runs'][0]['text']);
-                $parsed = date_parse($duration);
-            @$data[$k]['id'] .= $dataz['compactVideoRenderer']['videoId'];
-            @$data[$k]['title'] .= $dataz['compactVideoRenderer']['title']['runs'][0]['text'];
-            @$data[$k]['duration'] .= $dataz['compactVideoRenderer']['lengthText']['runs'][0]['text'];
-            @$data[$k]['size'] .=  $yt->formatSizeUnits(($parsed['hour'] * 3600 + $parsed['minute'] * 60 + $parsed['second']) * (24 * 1000));
-            @$data[$k]['channel'] .= $dataz['compactVideoRenderer']['shortBylineText']['runs'][0]['text'];
-            @$data[$k]['view'] .= $dataz['compactVideoRenderer']['viewCountText']['runs'][0]['text'];
-            @$data[$k]['nonapi'] .= 'yes';
-            @$data[$k]['type'] .= 'video';
-            $k++;
-            }
+require('simple_html_dom.php');
+
+// Create DOM from URL or file
+$html = file_get_html('https://www.google.co.id/search?q=bts&safe=strict&tbm=vid&sxsrf=ALeKk00ykrKfOBghY1D3R0DBZJv9vUgk0w:1607930046046&source=lnt&tbs=srcf:H4sIAAAAAAAAAC2MQQ6AIBDEfsPFhD8B7mEizBJ20fh7DXpr2qTbrdNnlli0hUNbT7awkOCuFENawgfyJOX6u1rTrhWe-IqIPYAmwyvOb_1YASGYprloAAAA&sa=X&ved=0ahUKEwjb9d6Z9sztAhX37XMBHfivAncQpwUIJQ&biw=1366&bih=625&dpr=1');
+
+// creating an array of elements
+$videos = [];
+
+// Find top ten videos
+$i = 1;
+foreach ($html->find('div[class=ZINbbc xpd O9g5cc uUPGi]') as $video) {
+        if ($i > 10) {
+                break;
         }
-echo '{ "status" : "'.rawurlencode($hasil).'", "items" : ';
-echo json_encode($data);
-echo '}';
 
+        // Find item link element
+        $videoDetails = $video->find('div.kCrYT', 0);
 
+        // get title attribute
+        $videoTitle = str_replace(' - YouTube','', $videoDetails->find('h3', 0)->plaintext);
+
+        // get href attribute
+        $videoUrl = urldecode($videoDetails->find('a', 0)->href);
+        $videUrl = explode("=",$videoUrl);
+        $videoUrl = str_replace("&sa", "", $videUrl[2]);
+        $videoDatee = $video->find('div[class=BNeawe s3v9rd AP7Wnd]', 0);
+        $videoDate = $videoDatee->find('span', 0)->plaintext;
+        // push to a list of videos
+        $videos[] = [
+                'title' => $videoTitle,
+                'url' => $videoUrl,
+                'date' => $videoDate
+        ];
+
+        $i++;
+}
+
+echo json_encode($videos, JSON_UNESCAPED_UNICODE);
 ?>
