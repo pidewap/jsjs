@@ -1,9 +1,8 @@
 <?php
-
 require('simple_html_dom.php');
 $teks_asli = $_GET['q'];
-$hasil = str_replace(['-'], [' '], $teks_asli);
-$url='https://www.google.co.id/search?q='.rawurlencode($hasil).'&safe=strict&tbm=vid&sxsrf=ALeKk00ykrKfOBghY1D3R0DBZJv9vUgk0w:1607930046046&source=lnt&tbs=srcf:H4sIAAAAAAAAAC2MQQ6AIBDEfsPFhD8B7mEizBJ20fh7DXpr2qTbrdNnlli0hUNbT7awkOCuFENawgfyJOX6u1rTrhWe-IqIPYAmwyvOb_1YASGYprloAAAA&sa=X&ved=0ahUKEwjb9d6Z9sztAhX37XMBHfivAncQpwUIJQ&biw=1366&bih=625&dpr=1';
+$hasil = str_replace([' '], ['-'], $teks_asli);
+$url='https://www.google.co.id/search?q='.$hasil.'-youtube&tbm=vid';
 // Create DOM from URL or file
 $html = file_get_html($url);
 
